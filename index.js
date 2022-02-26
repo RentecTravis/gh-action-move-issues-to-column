@@ -113,6 +113,8 @@ try {
 
       core.info(`Column name: ${columnName}`);
       core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
+      core.setFailed("Is this thing working?");
+      return;
 
       const targetColumn =
         typeof columnId !== "undefined"
