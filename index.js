@@ -8,18 +8,18 @@ try {
   const columnIdQuery = `query columns($owner: String!, $name: String!, $projectName: String!) {
     repository(owner: $owner, name: $name) {
       projects(search: $projectName, last: 1) {
-	edges {
-	  node {
-	    columns(first: 20) {
-	      edges {
-		node {
-		  id
-		  name
-		}
-	      }
-	    }
-	  }
-	}
+        edges {
+          node {
+            columns(first: 20) {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
       }
     }
   }`;
@@ -38,13 +38,13 @@ try {
   const cardIdsForIssue = `query issues($issueId: ID!) {
     node(id: $issueId) {
       ... on Issue {
-	projectCards(first: 5) {
-	  edges {
-	    node {
-	      id
-	    }
-	  }
-	}
+        projectCards(first: 5) {
+          edges {
+            node {
+              id
+            }
+          }
+        }
       }
     }
   }`;
@@ -84,7 +84,7 @@ try {
       const columnId = core.getInput("target-column-id");
 
       const payload =
-        parsedInput.length != 0 ? parsedInput : github.context.payload;
+        parsedInput.length !== 0 ? parsedInput : github.context.payload;
       core.info(`payload: ${payload}`);
 
       const issues = Array.isArray(payload) ? payload : [payload];
@@ -154,4 +154,3 @@ try {
 } catch (error) {
   core.setFailed(error.message);
 }
-
