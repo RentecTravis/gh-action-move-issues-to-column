@@ -112,7 +112,7 @@ try {
         .map((c) => c.node);
       const targetColumn =
         typeof columnId !== "undefined"
-          ? columns.find((c) => c.id === columnId)
+          ? columns.find((c) => c.id == columnId)
           : columns.find(
               (c) => c.name.toLowerCase() === columnName.toLowerCase()
             );
