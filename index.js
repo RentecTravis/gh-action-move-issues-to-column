@@ -110,6 +110,10 @@ try {
       const columns = projectEdges
         .flatMap((p) => p.node.columns.edges)
         .map((c) => c.node);
+
+      core.info(`Column name: ${columnName}`);
+      core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
+
       const targetColumn =
         typeof columnId !== "undefined"
           ? columns.find((c) => c.id == columnId)
