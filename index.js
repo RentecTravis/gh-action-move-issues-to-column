@@ -58,7 +58,7 @@ try {
     });
   }
 
-  const updateCardColumnMutation = `mutation updateProjectCard($cardId: String!, $columnId: String!) {
+  const updateCardColumnMutation = `mutation updateProjectCard($cardId: ID!, $columnId: ID!) {
     moveProjectCard(input:{cardId: $cardId, columnId: $columnId}) {
       clientMutationId
     }
