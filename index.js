@@ -70,20 +70,19 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
       .flatMap((p) => p.node.columns.edges)
       .map((c) => c.node);
 
-    const targetColumn =
-      typeof columnId === "undefined"
-        ? columns.find((c) => {
-            core.info(
-              `column.name (${JSON.stringify(c.name)}) ` +
-                `=== columnName (${JSON.stringify(columnName)}): ` +
-                `${JSON.stringify(
-                  c.name.toLowerCase() === columnName.toLowerCase()
-                )}`
-            );
+    const targetColumn = columnId
+      ? columns.find((c) => c.id === columnId)
+      : columns.find((c) => {
+          core.info(
+            `column.name (${JSON.stringify(c.name)}) ` +
+              `=== columnName (${JSON.stringify(columnName)}): ` +
+              `${JSON.stringify(
+                c.name.toLowerCase() === columnName.toLowerCase()
+              )}`
+          );
 
-            return c.name.toLowerCase() === columnName.toLowerCase();
-          })
-        : columns.find((c) => c.id === columnId);
+          return c.name.toLowerCase() === columnName.toLowerCase();
+        });
 
     core.info(
       `columnId === undefined: ${JSON.stringify(
