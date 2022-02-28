@@ -8234,7 +8234,7 @@ try {
 
       const payload =
         parsedInput.length !== 0 ? parsedInput : github.context.payload;
-      core.info(`payload: ${payload}`);
+      core.info(`JSON.stringify(payload): ${JSON.stringify(payload, null, 2)}`);
 
       const issues = Array.isArray(payload) ? payload : [payload];
       const issueSample = issues[0].issue;
@@ -8259,9 +8259,15 @@ try {
       const columns = projectEdges
         .flatMap((p) => p.node.columns.edges)
         .map((c) => c.node);
+
+      core.info(`Column name: ${columnName}`);
+      core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
+      core.setFailed("Is this thing working?");
+      return;
+
       const targetColumn =
         typeof columnId !== "undefined"
-          ? columns.find((c) => c.id === columnId)
+          ? columns.find((c) => c.id == columnId)
           : columns.find(
               (c) => c.name.toLowerCase() === columnName.toLowerCase()
             );

@@ -85,7 +85,7 @@ try {
 
       const payload =
         parsedInput.length !== 0 ? parsedInput : github.context.payload;
-      core.info(`payload: ${payload}`);
+      core.info(`JSON.stringify(payload): ${JSON.stringify(payload, null, 2)}`);
 
       const issues = Array.isArray(payload) ? payload : [payload];
       const issueSample = issues[0].issue;
