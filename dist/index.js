@@ -8222,22 +8222,22 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
     const targetColumn =
       typeof columnId !== "undefined"
         ? columns.find((c) => c.id === columnId)
-        : columns.find(
-            (c) => c.name.toLowerCase() === columnName.toLowerCase()
-          );
+        : columns.find((c) => {
+            core.info(
+              `column.name (${JSON.stringify(c.name)}) ` +
+                `=== columnName (${JSON.stringify(columnName)}): ` +
+                `${JSON.stringify(
+                  c.name.toLowerCase() === columnName.toLowerCase()
+                )}`
+            );
+
+            return c.name.toLowerCase() === columnName.toLowerCase();
+          });
 
     core.info(`Column name: ${columnName.toLowerCase()}`);
     core.info(`Column id: ${columnId}`);
     core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
     core.info(`targetColumn: ${JSON.stringify(targetColumn, null, 2)}`);
-
-    for (const { name } of columns) {
-      core.info(
-        `column.name (${JSON.stringify(name)}) ` +
-          `=== columnName (${JSON.stringify(columnName)}): ` +
-          `${JSON.stringify(name.toLowerCase() === columnName.toLowerCase())}`
-      );
-    }
 
     // Find card ids for issues
     const issueIds = issues.map((i) => i.issue.node_id);
