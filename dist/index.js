@@ -8220,9 +8220,8 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
       .map((c) => c.node);
 
     const targetColumn =
-      typeof columnId !== "undefined"
-        ? columns.find((c) => c.id === columnId)
-        : columns.find((c) => {
+      typeof columnId === "undefined"
+        ? columns.find((c) => {
             core.info(
               `column.name (${JSON.stringify(c.name)}) ` +
                 `=== columnName (${JSON.stringify(columnName)}): ` +
@@ -8232,10 +8231,16 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
             );
 
             return c.name.toLowerCase() === columnName.toLowerCase();
-          });
+          })
+        : columns.find((c) => c.id === columnId);
 
-    core.info(`Column name: ${columnName.toLowerCase()}`);
-    core.info(`Column id: ${columnId}`);
+    core.info(
+      `columnId === undefined: ${JSON.stringify(
+        typeof columnId === "undefined"
+      )}`
+    );
+    core.info(`Column name: ${columnName}`);
+    core.info(`Column id: ${JSON.stringify(columnId, null, 2)}`);
     core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
     core.info(`targetColumn: ${JSON.stringify(targetColumn, null, 2)}`);
 
