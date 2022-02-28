@@ -8227,7 +8227,9 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
           );
 
     core.info(`Column name: ${columnName}`);
+    core.info(`Column id: ${columnId}`);
     core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
+    core.info(`targetColumn: ${JSON.stringify(targetColumn, null, 2)}`);
 
     // Find card ids for issues
     const issueIds = issues.map((i) => i.issue.node_id);
