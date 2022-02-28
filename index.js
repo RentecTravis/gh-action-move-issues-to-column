@@ -40,26 +40,23 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
 (async function () {
   try {
     // Set input constants
-    const inputIssues = core.getInput("issues");
-    const parsedInput = JSON.parse(inputIssues);
+    const inputIssues = JSON.parse(core.getInput("issues"));
     const project = core.getInput("project-name");
     const columnName = core.getInput("target-column");
     const columnId = core.getInput("target-column-id");
 
-    const payload =
-      parsedInput.length !== 0 ? parsedInput : github.context.payload;
-    core.info(`JSON.stringify(payload): ${JSON.stringify(payload, null, 2)}`);
-
+    const payload = inputIssues.length ? inputIssues : github.context.payload;
     const issues = Array.isArray(payload) ? payload : [payload];
-    const issueSample = issues[0].issue;
+
+    core.info(`Issues: ${JSON.stringify(issues, null, 2)}`);
 
     // Early return if a member of payload doesn't respond to `issue`
-    if (typeof issueSample === "undefined") {
+    if (typeof issues[0].issue === "undefined") {
       core.info("No issues to move");
       return;
     }
 
-    const repoUrl = issueSample.repository_url;
+    const repoUrl = issues[0].issue.repository_url;
     const splitUrl = repoUrl.split("/");
     const repoOwner = splitUrl[4];
     const repo = splitUrl[5];
@@ -72,27 +69,7 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
 
     const targetColumn = columnId
       ? columns.find((c) => c.id === columnId)
-      : columns.find((c) => {
-          core.info(
-            `column.name (${JSON.stringify(c.name)}) ` +
-              `=== columnName (${JSON.stringify(columnName)}): ` +
-              `${JSON.stringify(
-                c.name.toLowerCase() === columnName.toLowerCase()
-              )}`
-          );
-
-          return c.name.toLowerCase() === columnName.toLowerCase();
-        });
-
-    core.info(
-      `columnId === undefined: ${JSON.stringify(
-        typeof columnId === "undefined"
-      )}`
-    );
-    core.info(`Column name: ${columnName}`);
-    core.info(`Column id: ${JSON.stringify(columnId, null, 2)}`);
-    core.info(`Searching columns: ${JSON.stringify(columns, null, 2)}`);
-    core.info(`targetColumn: ${JSON.stringify(targetColumn, null, 2)}`);
+      : columns.find((c) => c.name.toLowerCase() === columnName.toLowerCase());
 
     // Find card ids for issues
     const issueIds = issues.map((i) => i.issue.node_id);
@@ -107,7 +84,9 @@ const cardIdsForIssue = `query issues($issueId: ID!) {
     // Update cards only if the column exists
     if (typeof targetColumn === "undefined") {
       core.setFailed(
-        "Target column does not exist on project. Please use a different column name"
+        "Target column does not exist on project. Please use a different column selector:\n" +
+          `target-column: ${JSON.stringify(columnName)}\n` +
+          `target-column-id: ${JSON.stringify(columnId)}`
       );
       return;
     }
